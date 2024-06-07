@@ -1,0 +1,407 @@
+/* --- OVERALL SETTINGS ------------------------------------------------------------------------- */
+:root {
+  --fs-small: calc(11pt + 0.1vw);/*11pt;*/
+  --fs-medium: calc(1.45 * var(--fs-small));
+  --fs-big: calc(2 * var(--fs-small));
+
+  --bg1: #282828;
+  --bg2: #383838;
+  --bg3: #484848;
+
+  --fg: #fafafa;
+
+  --acc1: #ff8c51;
+  --acc2: #c3d1ff;
+
+  --user: var(--acc2);
+  --gpt: var(--acc1);
+}
+
+@media only screen and (max-aspect-ratio: 1/1){
+  :root {
+    --fs-small: calc(11pt + 0.1vh);/*11pt;*/
+    --fs-medium: calc(1.45 * var(--fs-small));
+    --fs-big: calc(2 * var(--fs-small));
+  }
+}
+
+* {
+  color: var(--fg);
+  font-family: Roboto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg2) rgba(0,0,0,0);
+  /*transition: color 500ms;
+  transition: background-color 500ms;
+  transition: border 500ms;*/
+}
+
+body, html {
+  background-color: var(--bg1);
+  font-size: var(--fs-small);
+  margin: 0px;
+  padding: 0px;
+  overflow: hidden;
+}
+
+body {
+  display: flex;
+  padding: 2em;
+}
+
+/* --- NAVIGATION ------------------------------------------------------------------------------- */
+nav {
+  background-color: var(--bg3);
+  padding: 0.4em;
+  border-radius: 0.4em;
+  width: var(--fs-big);
+  height: var(--fs-big);
+  transition: width 500ms, height 500ms;
+}
+
+#nav-hint {
+  width: var(--fs-big);
+  height: var(--fs-big);
+  text-align: center;
+  line-height: 1.1em;
+  font-size: var(--fs-big);
+  display:block;
+}
+
+.nav-content {
+  display: none;
+  margin: 1em 2em 0em 2em;
+  width: calc(100% - 4em);/*calc(17.5vw - 4em);*/
+  overflow:hidden;
+}
+
+.nav-content p, .nav-content h2 {
+  margin: 0px;
+}
+
+.nav-content h2 {
+  font-size: var(--fs-medium);
+  padding: 0.5em 0px 1em 0px;
+}
+
+#nav-hint .nav-content {
+  margin: 0px;
+}
+
+nav:hover #nav-hint , nav:has(input[name="temp_val"]:focus) #nav-hint  {
+  width: 100%;
+}
+
+nav:hover #nav-hint .nav-content, nav:has(input[name="temp_val"]:focus) #nav-hint .nav-content {
+  display: inline;
+}
+
+
+nav:hover .nav-content, nav:has(input[name="temp_val"]:focus) .nav-content {
+  display: block;
+}
+
+nav:hover, nav:has(input[name="temp_val"]:focus) {
+  padding-bottom: 2em;
+  width: 40vw;
+  overflow-y:auto;
+  height: calc(100vh - 6.5em);
+}
+
+/* --- TEMPERATURE SLIDER ----------------------------------------------------------------------- */
+input, textarea, button {
+  font-size: var(--fs-small);
+}
+
+input[type="number"] {
+  background-color: var(--bg2);
+  border: none;
+  padding: 1em;
+  width: calc(100% - 2em);
+  font-family: Roboto;
+  overflow-y: auto;
+  border-radius: 0.4em;
+  text-align: right;
+  -moz-appearance: textfield;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none;  
+}
+
+
+.slidecontainer h2 {
+  padding-bottom: 0.5em;
+}
+
+.slider {
+  margin: 0px 1% 1em 1%;
+  -webkit-appearance: none;
+  width: 98%;
+  height: 7px;
+  border-radius: 7px;
+  outline: none;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+  background-image: linear-gradient(to right, #ff3800, #ff692c, #ff8c51, #ffab78, #ffc7a3, #ffceb8, #ffd6cc, #ffe0dd, #fed8e1, #f5d2eb, #e2d0f7, #c3d1ff);
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--fg);
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: var(--fg);
+  cursor: pointer;
+}
+
+/* --- TABLE LAYOUT ----------------------------------------------------------------------------- */
+table {
+  width: 100%;
+  padding:1em;
+  margin:1em 0px 0px 0px;
+  background-color: var(--bg2);
+  border-radius: 0.4em;
+}
+
+td {
+  padding: 0.5em 0px;
+  word-break: break-all;
+}
+
+td:first-child {
+  width: 35%;
+  text-wrap: wrap;
+  border-bottom: 1px solid var(--acc1);
+  border-right: 0.3em solid var(--acc1);
+  /*border-left: 1em solid var(--bg3);*/
+  padding: 0.5em 0px 0.5em 1em;
+  border-top: 0.6em solid transparent
+}
+
+td:last-child {
+  padding: 0.5em 0px 0.5em 1em;
+  background-color: var(--bg1);
+  /*border-top: 1px solid var(--bg3);*/
+  border-left: 0.7em solid var(--bg3);
+  /*border-right: 1px solid var(--bg3);*/
+}
+
+/* --- SHORTCUTS -------------------------------------------------------------------------------- */
+.shortcuts {
+  margin-top: 0px;
+}
+
+.shortcut-key {
+  padding: 0.5em;
+  background-color: var(--bg3);
+  border-radius: 0.4em;
+  word-break:keep-all;
+}
+
+.shortcut-keys {
+  line-height: 2.4em;
+}
+
+.shortcut-key {
+  margin-left: -0.5em;
+  border-left: 2px solid var(--acc1);
+}
+
+.shortcut-key:not(:last-child) {
+  margin-right: 0.7em;
+}
+
+/* --- THEME TOGGLE ----------------------------------------------------------------------------- */
+#theme-toggle-label {
+  font-size: var(--fs-big);
+  width: 1em;
+  height: 1em;
+  background-color: var(--bg2);
+  display: inline-block;
+  padding: 0.2em;
+  border-left: 2px solid transparent;
+  border-radius: 0.2em;
+  line-height: 1em;
+  font-weight: normal;
+  text-align: center;
+  margin-left: 0.5em;
+  letter-spacing: 1pt; /*to horizontally align the symbol*/
+}
+
+#theme-toggle-label:hover {
+  border-left: 2px solid var(--acc1);
+  color: var(--acc1);
+  cursor: pointer;
+}
+
+#theme-toggle {
+  display: none;
+}
+
+/* --- CHAT SETTINGS ---------------------------------------------------------------------------- */
+ul, ol {
+  line-height: 1.4em;
+}
+
+main {
+  width: -moz-available;
+  width: -webkit-fill-available;
+  margin-left: 2em;
+  position: relative;
+  height: calc(100vh - 4em);
+}
+
+.text-box {
+  background-color: var(--bg3);
+  border: none;
+  padding: 1em;
+  resize:vertical;
+  font-family: Roboto;
+  overflow-y: auto;
+  border-radius: 0.4em;
+  width: -webkit-fill-available;
+  width: -moz-available;
+}
+
+#role {
+  min-height: 1.3em;
+  height:1.3em;
+  max-height: 6em;
+}
+
+#question {
+  min-height: 1.3em;
+  height: 6em;
+  max-height: 24em;
+  position:absolute;
+  bottom: 4.5em;
+  left:0px;
+  right:0px;
+}
+
+.buttons {
+  position: absolute;
+  bottom: 0em;
+}
+
+button {
+  border-radius: 0.4em;
+  height: 4em;
+  padding: 1em;
+  margin: 0px 0.4em 0px 0px;
+  line-height: 1.2em;
+  text-align: center;
+  color: var(--fg);  
+  background-color: var(--bg3);
+  border: none;
+  border-left: 2px solid var(--bg3);
+  border-right: 2px solid var(--bg3);
+}
+
+button:hover {
+  border-left: 2px solid var(--acc1);
+  color: var(--acc1);
+  cursor: pointer;
+}
+
+#chat {
+  width: -webkit-fill-available;
+  width: -moz-available;
+  margin: 2em 1em;
+  position: relative;
+  height: 60vh;
+  overflow-y: auto;
+  scrollbar-color: var(--bg3) rgba(0,0,0,0);
+  scrollbar-width: thin;
+}
+
+pre {
+  padding: 1em;
+}
+
+code  {
+  background-color: var(--bg3);
+  padding: 0.1em 0.4em;
+  border-radius: 0.4em;
+  color: var(--fg);
+  font-family: consolas;
+  position: relative;
+}
+code * {  
+  font-family: consolas;
+}
+
+blockquote * {
+  margin: 0.5em 0px;
+  font-family: Times New Roman;
+  text-transform:uppercase;
+  font-size: calc(0.9 * var(--fs-small));
+}
+
+blockquote :first-child, blockquote :last-child {
+  margin: 0px;
+}
+
+blockquote p::first-letter {
+  font-size: calc(1.1 * var(--fs-small));
+}
+
+blockquote {
+  background-color: var(--bg2);
+  padding: 1em;
+  margin: 1em 0em 2em 3em;
+  border-radius: 0.4em;
+  border-left: 0.5em solid var(--bg3);
+}
+
+.copy-to-clipboard {
+  text-align: center;
+  height: 1em;
+  margin: 0px;
+  display: inline-block;
+  line-height: 0em;
+  position: absolute;
+  right: 0.6em;
+  top: 0.6em;
+  border: 0px;
+}
+
+.copy-to-clipboard:after {
+  content:"\2604";
+  position: absolute;
+  left: 0.6em;
+}
+
+#chat img {
+  margin: 2em calc(50% - 1.5em);
+  width: 3em;
+  height: 3em;
+}
+
+.user, .gpt {
+  padding-top: 1em;
+  font-weight: bold;
+  font-size: var(--fs-medium);
+}
+
+.gpt {
+  color: var(--gpt);
+}
+
+.user {
+  color: var(--user);
+}

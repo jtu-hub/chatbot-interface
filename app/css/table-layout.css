@@ -1,0 +1,43 @@
+/* 
+A table layout by Jonas T. Ulbrich, www.jonasulbrich.ch
+this table requires you to define at least the following variables somewhere:
+:root {
+  --bg1: #282828;
+  --bg2: #383838;
+  --bg3: #484848;
+
+  --acc1: #ff8c51;
+}
+*/
+
+/* --- TABLE LAYOUT ----------------------------------------------------------------------------- */
+table {
+  width: 100%;
+  padding:1em;
+  margin:1em 0px 0px 0px;
+  background-color: var(--bg2);
+  border-radius: 0.4em;
+}
+
+td {
+  padding: 0.5em 0px;
+  word-break: break-all;
+}
+
+td:first-child {
+  width: 35%;
+  text-wrap: wrap;
+  border-bottom: 1px solid var(--acc1);
+  border-right: 0.3em solid var(--acc1);
+  /*border-left: 1em solid var(--bg3);*/
+  padding: 0.5em 0px 0.5em 1em;
+  border-top: 0.6em solid transparent
+}
+
+td:last-child {
+  padding: 0.5em 0px 0.5em 1em;
+  background-color: var(--bg1);
+  /*border-top: 1px solid var(--bg3);*/
+  border-left: 0.7em solid var(--bg3);
+  /*border-right: 1px solid var(--bg3);*/
+}

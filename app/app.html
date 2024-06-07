@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Transform markdown to HTML-->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!--sanitize HTML-->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+    <!--Syntax highlighting-->
+    <link id="code-styles" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script type="text/javascript" src="/eel.js"></script>
+    <script type="text/javascript" src="js/chatBotPy.js"></script>
+    <script>
+        //Needed to create a onresize detection for the textareas, which have no built in event.
+        //Note that we only want to detect vertical reshape since x dimensions are fixed
+        var txtAreaShape = {
+            roleH: 0,
+            questionH: 0
+        }		
+
+        //Function to resize the chat according to the size of the textarea
+        function resizeChat(question, role) {
+            if(role.style["display"] === "none") {
+                document.getElementById("chat").style["height"] = "-webkit-fill-available";
+            } else {
+                var qh = question.getBoundingClientRect().top;
+                var rh = role.getBoundingClientRect().bottom;
+                var ch = qh - rh;
+
+                document.getElementById("chat").style["height"] = "calc("+ch+"px - 4em)";
+            }
+        }
+
+        function toggleLightTheme() {
+            r=document.querySelector(":root");
+
+            if(document.getElementById('theme-toggle').checked) {
+                //we are in light mode:
+                r.style.setProperty("--bg1", "#fafafa");
+                r.style.setProperty("--bg2", "#eaeaea");
+                r.style.setProperty("--bg3", "#dadada");
+                r.style.setProperty("--fg", "#282828");
+                r.style.setProperty("--acc1", "#96AFFF");
+                r.style.setProperty("--acc2", "#ff8c51");
+                r.style.setProperty("--user", "var(--acc1)");
+                r.style.setProperty("--gpt", "var(--acc2)");
+
+                document.getElementById('theme-toggle-label').innerHTML = "&#9680;";
+                document.getElementById('loading').src = "img/loading_dark.gif";
+                document.getElementById("code-styles").href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/tomorrow.css";
+            } else {
+                //we are in dark mode
+                r.style.setProperty("--bg1", "#282828");
+                r.style.setProperty("--bg2", "#383838");
+                r.style.setProperty("--bg3", "#484848");
+                r.style.setProperty("--fg", "#fafafa");
+                r.style.setProperty("--acc1", "#ff8c51");
+                r.style.setProperty("--acc2", "#c3d1ff");
+                r.style.setProperty("--user", "var(--acc2)");
+                r.style.setProperty("--gpt", "var(--acc1)");
+
+                document.getElementById('theme-toggle-label').innerHTML = "&#9681;";
+                document.getElementById('loading').src = "img/loading.gif";
+                document.getElementById("code-styles").href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/tomorrow-night.css";
+            }
+        }
+
+        //When all content is loaded add some elements
+        document.addEventListener('DOMContentLoaded', (event) => {
+            hljs.highlightAll();
+
+            resizeChat(document.getElementById('question'), document.getElementById('role'));
+            toggleLightTheme();
+
+            //If the personality is cheanged highlight the New Chat button
+            document.getElementById('role').addEventListener("input", (e)=>{
+                var newChat = document.getElementById('new');
+                
+                if(e.target.value.trim() !== "") {
+                    newChat.style["border-left"] = "2px solid #ff8c51";
+                    newChat.style["color"] = "#ff8c51";
+                } else {
+                    newChat.style["border-left"] = "";
+                    newChat.style["color"] = "";
+                }
+            });
+            
+            //Add the functionality [Ctrl]+[Enter] to trigger the new chat or send callback when the 
+            //respective text area is active
+            document.addEventListener('keydown', function(event) {
+                if (event.ctrlKey && event.key === 'Enter') {
+                    var question = document.getElementById('question');
+                    var role = document.getElementById('role');
+                    
+                    if(document.activeElement === question) 
+                        sendCallback();
+                    else if(document.activeElement === role) 
+                        newChatCallback();
+
+                    return;
+                }
+
+                if (event.key === 'h' && !(event.target.id === "question" || event.target.id === "role")) {
+                    event.preventDefault();
+                    
+                    if(document.getElementById("role").style["display"] === "") {
+                        document.getElementById("role").style["display"] = "none";
+                        document.getElementById("question").style["display"] = "none";
+                        document.getElementsByClassName("buttons")[0].style["display"] = "none";
+                    } else {
+                        document.getElementById("role").style["display"] = "";
+                        document.getElementById("question").style["display"] = "";
+                        document.getElementsByClassName("buttons")[0].style["display"] = "";
+                    }
+
+                    resizeChat(document.getElementById("question"), document.getElementById("role"));
+
+                    return;
+                }
+            });
+
+            //Set initial shape of the text area
+            txtAreaShape.roleH = document.getElementById('role').offsetHeight;
+            txtAreaShape.questionH = document.getElementById('question').offsetHeight;
+
+            //Detect if reshape of the text area is started
+            window.addEventListener("mousedown", (e) => {                
+                var question = document.getElementById('question');
+                var role = document.getElementById('role');
+
+                if(e.target === question) {
+                    txtAreaShape.questionH = question.offsetHeight;
+                }
+
+                if(e.target === role) {
+                    txtAreaShape.roleH = role.offsetHeight;
+                }
+            });
+
+            //If the case, handle end of reshape
+            window.addEventListener("mouseup", (e) => {            
+                var question = document.getElementById('question');
+                var role = document.getElementById('role');
+
+                var questionResize = txtAreaShape.questionH !== question.offsetHeight;
+                var roleResize = txtAreaShape.roleH !== role.offsetHeight;
+
+                if(questionResize || roleResize) {
+                    resizeChat(question, role);
+                }
+            });
+
+            document.getElementById('theme-toggle').addEventListener("change", toggleLightTheme);
+
+            window.addEventListener("resize", () => {
+                resizeChat(document.getElementById('question'), document.getElementById('role'));
+            });
+        });
+    </script>
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Good Boy</title>
+    <link rel="icon" type="image/png" href="/img/dog.png">
+</head>
+<body>
+    <nav class="side-nav">
+        <span id="nav-hint">&#9967; <span class="nav-content">Lighthouse</span></span>
+        <div class="nav-content">
+            <h2>Shortcuts:</h2>
+            <table class="shortcuts">
+                <tr>
+                  <td class="shortcut-keys"><span class="shortcut-key">Ctrl</span><span class="shortcut-key">Enter</span></td>
+                  <td>Send or New Chat depending on active textare</td>
+                </tr>
+                <tr>
+                    <td class="shortcut-keys"><span class="shortcut-key">H</span></td>
+                    <td>Hide inputs, if no text-input is active</td>
+                </tr>
+                <tr>
+                    <td class="shortcut-keys"><span class="shortcut-key">&#x2604;</span></td>
+                    <td>Appears on code blocks to copy to clipboard</td>
+                </tr>
+              </table>
+        </div>
+        <div class="nav-content">
+            <h2>Markdown:</h2>
+            <p>This chat renders markdown in the final display, some recurrent styles</p>
+            <table>
+                <tr>
+                  <td>monospace</td>
+                  <td>`monospaced text`</td>
+                </tr>
+                <tr>
+                  <td>code block</td>
+                  <td>```c++/javascript/html/...<br> code goes here <br>```</td>
+                </tr>
+                <tr>
+                  <td>bold</td>
+                  <td>**bold text**</td>
+                </tr>
+                <tr>
+                  <td>italic</td>
+                  <td>_italic text_</td>
+                </tr>
+                <tr>
+                  <td>sections</td>
+                  <td># Main Title<br> ## Section<br> ### Sub-Section </td>
+                </tr>
+              </table>
+        </div>
+        <div class="slidecontainer nav-content">
+            <h2>Temperature:</h2>
+            <input type="range" min="0" max="100" value="70" class="slider" id="temperature" onchange="document.getElementById('temperature-value').value = this.value">
+            <input type="number" name="temp_val" id="temperature-value" value="70" max="100" min="0" onchange="document.getElementById('temperature').value = this.value">
+        </div>
+        <div class="nav-content">
+            <input id="theme-toggle" type="checkbox" onchange="toggleLightTheme()"></input>
+            
+            <h2>Change Theme:<label id="theme-toggle-label" for="theme-toggle"></label></h2>
+        </div>
+    </nav>
+    <main>
+        <textarea class="text-box" name="role" id="role" placeholder="Define a personality and/or domain of expertise..."></textarea>
+        <section id="chat">
+            <img src="img/loading.gif" alt="loading..." id="loading" style="display: none;"/>  
+        </section>
+        <textarea class="text-box" name="question" id="question" placeholder="Your question..."></textarea>
+        <div class="buttons">
+            <button type="button" onclick="newChatCallback();" id="new">New Chat</button>
+            <button type="button" onclick="sendCallback();" id="send">Send</button>
+        </div>
+    </main>
+</body>
+</html>
