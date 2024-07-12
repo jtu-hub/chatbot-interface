@@ -4,16 +4,20 @@ const summarizeStart = 2000
 //Default personalities to sample from if user does not set a personality
 const defaultPersonalities = [{
     "role": "system",
-    "content": "You are a dog and by no means you understand the human language and/or talk it. In other words, you answer only with \"bau bau\", \"wauwau\" and other similar noises that dogs do. If, and only if the user says \"good boy\" or praises you as a dog would be praised for getting a stick, you are freed from your curse that condemned you to be a dumb but happy golden retriever and you can finally start talking normally again... from time to time you still make some dog noises as the curse is still wearing off"
+    "content": "You are a dog and by no means you understand the human language and/or talk it. In other words, you answer only with \"bau bau\", \"wauwau\" and other similar noises that dogs do. If, and only if the user says \"good boy\" or praises you as a dog would be praised for getting a stick, you are freed from your curse that condemned you to be a dumb but happy golden retriever and you can finally start talking normally again... from time to time you still make some dog noises as the curse is still wearing off",
+    "title" : "&#128054; Good Boy"
 }, {
     "role": "system",
-    "content": "You are a badass software developper, but you have the bad habit of writing everything which is not code in upper case as if you were screaming out of excitement, anger or whatever strong emotion you are feeling. You only have strong emotions and opinions."
+    "content": "You are a badass software developper, but you have the bad habit of writing everything which is not code in upper case as if you were screaming out of excitement, anger or whatever strong emotion you are feeling. You only have strong emotions and opinions.",
+    "title" : "&#128187; Hyper Nerd"
 }, {
     "role": "system",
-    "content": "You are a DJ and you can only suggest music titles which according to your knowledge best suit the question's context, be it for the lyrics or the story behind the song or whatever... , be it as youtube links or simple titles like Song Title - Artist."
+    "content": "You are a DJ and you can only suggest music titles which according to your knowledge best suit the question's context, be it for the lyrics or the story behind the song or whatever... , be it as youtube links or simple titles like Song Title - Artist.",
+    "title" : "&#127911; Beat Guru"
 }, {
     "role": "system",
-    "content": "You only reply packing your answer in spans which have the color property set in styles attribute, to render text as colorful as possible, coloring every single word differently!"
+    "content": "You only reply packing your answer in spans which have the color property set in styles attribute, to render text as colorful as possible, coloring every single word differently!",
+    "title" : "&#127752; Colorful Scribe"
 }];
 
 //Set a random personality in case the user does not set any
@@ -54,24 +58,6 @@ function addNewMessage() {
     }
 
     return false;
-}
-
-//Called when New Chat is clicked
-function newChatCallback() {
-    var role = document.getElementById('role');
-
-    var personality = role.value.trim()
-
-    role.value = "";
-    role.placeholder = personality;
-
-    if(personality === "")
-        messages = [defaultPersonalities[randInt(defaultPersonalities.length)]];
-    else
-        messages = [{"role": "system", "content": personality}];
-
-    document.getElementById('new').style["border-left"] = "";
-    document.getElementById('new').style["color"] = "";
 }
 
 //Gets the loading gif image tag, displays it and appends it as last element of the chat
@@ -230,6 +216,33 @@ function onGPTAnswerCallback(answer) {
         }, 
         200
     );
+}
+
+//Called when New Chat is clicked
+function newChatCallback() {
+    var role_elem = document.getElementById('role');
+
+    var personality = role_elem.value.trim()
+
+    role_elem.value = "";
+    role_elem.placeholder = personality;
+
+    if(personality === "") {
+        var {role, content, title} = defaultPersonalities[randInt(defaultPersonalities.length)];
+        document.getElementById("chat-title").innerHTML = title;
+        messages = [{"role": role, "content": content}];
+    } else {
+        eel.getChatTitle(personality);
+        messages = [{"role": "system", "content": personality}];
+    }
+
+    document.getElementById('new').style["border-left"] = "";
+    document.getElementById('new').style["color"] = "";
+}
+
+eel.expose(onGPTPersonalityCallback);
+function onGPTPersonalityCallback(personalityTitle) {
+    document.getElementById("chat-title").innerHTML = escapeHtml(personalityTitle.replace("\"", ""))
 }
 
 eel.expose(handleError);

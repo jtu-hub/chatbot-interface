@@ -21,13 +21,13 @@
         }		
 
         //Function to resize the chat according to the size of the textarea
-        function resizeChat(question, main) {
+        function resizeChat(question, title) {
             if(question.style["display"] === "none") {
                 document.getElementById("chat").style["height"] = "-webkit-fill-available";
             } else {
                 var qh = question.getBoundingClientRect().top;
-                var mh = main.getBoundingClientRect().top;
-                var ch = qh - mh;
+                var th = title.getBoundingClientRect().bottom;
+                var ch = qh - th;
 
                 document.getElementById("chat").style["height"] = "calc("+ch+"px - 4em)";
             }
@@ -71,7 +71,7 @@
         document.addEventListener('DOMContentLoaded', (event) => {
             hljs.highlightAll();
 
-            resizeChat(document.getElementById('question'), document.getElementsByTagName("main")[0]);
+            resizeChat(document.getElementById('question'), document.getElementById("chat-title"));
             toggleLightTheme();
 
             //If the personality is cheanged highlight the New Chat button
@@ -113,7 +113,7 @@
                         document.getElementById("question").style["display"] = "";
                     }
 
-                    resizeChat(document.getElementById("question"), document.getElementsByTagName("main")[0]);
+                    resizeChat(document.getElementById("question"), document.getElementById("chat-title"));
 
                     return;
                 }
@@ -146,14 +146,14 @@
                 var roleResize = txtAreaShape.roleH !== role.offsetHeight;
 
                 if(questionResize) {
-                    resizeChat(question, document.getElementsByTagName("main")[0]);
+                    resizeChat(question, document.getElementById("chat-title"));
                 }
             });
 
             document.getElementById('theme-toggle').addEventListener("change", toggleLightTheme);
 
             window.addEventListener("resize", () => {
-                resizeChat(document.getElementById('question'), document.getElementsByTagName("main")[0]);
+                resizeChat(document.getElementById('question'), document.getElementById("chat-title"));
             });
         });
     </script>
@@ -229,7 +229,7 @@
         </div>
     </nav>
     <main>
-        <h1 id="chat-title"></h1>
+        <h1 id="chat-title">&#128054; Good Boy</h1>
         <section id="chat">
             <img src="img/loading.gif" alt="loading..." id="loading" style="display: none;"/>  
         </section>

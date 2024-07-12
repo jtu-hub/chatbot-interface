@@ -284,6 +284,13 @@ main {
   height: calc(100vh - 4em);
 }
 
+#chat-title {
+  margin-top: 0px;
+  padding:0.1em;
+  font-size: var(--fs-big);
+  text-align: center;
+}
+
 /* --- Text Areas ---*/
 .text-box {
   background-color: var(--bg2);
