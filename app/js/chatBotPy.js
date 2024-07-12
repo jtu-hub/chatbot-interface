@@ -133,19 +133,32 @@ function copyToClipboard(event) {
 //Adds functionality "Copy to clipboard" to code blocks
 function addCopyToClipboard() {
     let codeBlocks = document.getElementsByTagName("code");
+    let quoteBlocks = document.getElementsByTagName("blockquote");
 
     for(let i=0, code; code = codeBlocks[i]; i++) {
         if(code.className) {
             if(code.getElementsByClassName("copy-to-clipboard").length) {
-                code.getElementsByClassName("copy-to-clipboard").forEach((btn) => code.removeChild(btn))
+                Array(...code.getElementsByClassName("copy-to-clipboard")).forEach(btn => code.removeChild(btn));
             }
 
-            btn = document.createElement("button");
+            let btn = document.createElement("button");
             btn.className = "copy-to-clipboard";
             btn.onclick = copyToClipboard;
             
             code.appendChild(btn);
         }
+    }
+
+    for(let i=0, quote; quote = quoteBlocks[i]; i++) {
+        if(quote.getElementsByClassName("copy-to-clipboard").length) {
+            Array(...quote.getElementsByClassName("copy-to-clipboard")).forEach(btn => quote.removeChild(btn));
+        }
+
+        let btn = document.createElement("button");
+        btn.className = "copy-to-clipboard";
+        btn.onclick = copyToClipboard;
+        
+        quote.appendChild(btn);
     }
 }
 

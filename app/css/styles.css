@@ -1,8 +1,9 @@
 /* --- OVERALL SETTINGS ------------------------------------------------------------------------- */
 :root {
-  --fs-small: calc(11pt + 0.1vw);/*11pt;*/
-  --fs-medium: calc(1.45 * var(--fs-small));
-  --fs-big: calc(2 * var(--fs-small));
+  --fs-small: calc(9pt + 0.1vw);
+  --fs-normal: calc(11pt + 0.1vw);/*11pt;*/
+  --fs-medium: calc(1.45 * var(--fs-normal));
+  --fs-big: calc(2 * var(--fs-normal));
 
   --bg1: #282828;
   --bg2: #383838;
@@ -19,17 +20,18 @@
 
 @media only screen and (max-aspect-ratio: 1/1){
   :root {
-    --fs-small: calc(11pt + 0.1vh);/*11pt;*/
-    --fs-medium: calc(1.45 * var(--fs-small));
-    --fs-big: calc(2 * var(--fs-small));
+    --fs-small: calc(9pt + 0.1vh);
+    --fs-normal: calc(11pt + 0.1vh);/*11pt;*/
+    --fs-medium: calc(1.45 * var(--fs-normal));
+    --fs-big: calc(2 * var(--fs-normal));
   }
 }
 
 * {
   color: var(--fg);
-  font-family: Roboto;
+  font-family: Arial;
   scrollbar-width: thin;
-  scrollbar-color: var(--bg2) rgba(0,0,0,0);
+  scrollbar-color: var(--bg3) rgba(0,0,0,0);
   /*transition: color 500ms;
   transition: background-color 500ms;
   transition: border 500ms;*/
@@ -37,7 +39,7 @@
 
 body, html {
   background-color: var(--bg1);
-  font-size: var(--fs-small);
+  font-size: var(--fs-normal);
   margin: 0px;
   padding: 0px;
   overflow: hidden;
@@ -50,7 +52,7 @@ body {
 
 /* --- NAVIGATION ------------------------------------------------------------------------------- */
 nav {
-  background-color: var(--bg3);
+  background-color: var(--bg2);
   padding: 0.4em;
   border-radius: 0.4em;
   width: var(--fs-big);
@@ -72,6 +74,7 @@ nav {
   margin: 1em 2em 0em 2em;
   width: calc(100% - 4em);/*calc(17.5vw - 4em);*/
   overflow:hidden;
+  font-size: var(--fs-small);
 }
 
 .nav-content p, .nav-content h2 {
@@ -85,50 +88,65 @@ nav {
 
 #nav-hint .nav-content {
   margin: 0px;
+  font-size: var(--fs-big);
 }
 
-nav:hover #nav-hint , nav:has(input[name="temp_val"]:focus) #nav-hint  {
+nav:hover #nav-hint , 
+nav:has(input:focus) #nav-hint,
+nav:has(textarea:focus) #nav-hint {
   width: 100%;
 }
 
-nav:hover #nav-hint .nav-content, nav:has(input[name="temp_val"]:focus) #nav-hint .nav-content {
+nav:hover #nav-hint .nav-content, 
+nav:has(input:focus) #nav-hint .nav-content,
+nav:has(textarea:focus) #nav-hint .nav-content {
   display: inline;
 }
 
 
-nav:hover .nav-content, nav:has(input[name="temp_val"]:focus) .nav-content {
+nav:hover .nav-content, 
+nav:has(input:focus) .nav-content, 
+nav:has(textarea:focus) .nav-content {
   display: block;
 }
 
-nav:hover, nav:has(input[name="temp_val"]:focus) {
+nav:hover, 
+nav:has(input:focus), 
+nav:has(textarea:focus) {
   padding-bottom: 2em;
   width: 40vw;
   overflow-y:auto;
   height: calc(100vh - 6.5em);
 }
 
+nav:hover .nav-container, 
+nav:has(input:focus) .nav-container, 
+nav:has(textarea:focus) .nav-container {
+  height: calc(100vh - 10.5em);
+  overflow-y: scroll;
+  margin: 1em 0px;
+}
+
 /* --- TEMPERATURE SLIDER ----------------------------------------------------------------------- */
 input, textarea, button {
-  font-size: var(--fs-small);
+  font-size: var(--fs-normal);
 }
 
 input[type="number"] {
-  background-color: var(--bg2);
+  background-color: var(--bg1);
   border: none;
   padding: 1em;
   width: calc(100% - 2em);
-  font-family: Roboto;
+  font-family: consolas;
   overflow-y: auto;
   border-radius: 0.4em;
   text-align: right;
-  -moz-appearance: textfield;
 }
 
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none;  
+  -webkit-appearance: none;
 }
-
 
 .slidecontainer h2 {
   padding-bottom: 0.5em;
@@ -173,7 +191,7 @@ table {
   width: 100%;
   padding:1em;
   margin:1em 0px 0px 0px;
-  background-color: var(--bg2);
+  background-color: var(--bg1);
   border-radius: 0.4em;
 }
 
@@ -194,7 +212,7 @@ td:first-child {
 
 td:last-child {
   padding: 0.5em 0px 0.5em 1em;
-  background-color: var(--bg1);
+  background-color: var(--bg2);
   /*border-top: 1px solid var(--bg3);*/
   border-left: 0.7em solid var(--bg3);
   /*border-right: 1px solid var(--bg3);*/
@@ -230,7 +248,7 @@ td:last-child {
   font-size: var(--fs-big);
   width: 1em;
   height: 1em;
-  background-color: var(--bg2);
+  background-color: var(--bg1);
   display: inline-block;
   padding: 0.2em;
   border-left: 2px solid transparent;
@@ -258,41 +276,60 @@ ul, ol {
 }
 
 main {
-  width: -moz-available;
   width: -webkit-fill-available;
   margin-left: 2em;
   position: relative;
   height: calc(100vh - 4em);
 }
 
+/* --- Text Areas ---*/
 .text-box {
-  background-color: var(--bg3);
+  background-color: var(--bg2);
   border: none;
-  padding: 1em;
+  padding: 1em 4em 1em 1em;
   resize:vertical;
-  font-family: Roboto;
   overflow-y: auto;
   border-radius: 0.4em;
   width: -webkit-fill-available;
-  width: -moz-available;
+  line-height: 1.3em;
 }
 
 #role {
   min-height: 1.3em;
   height:1.3em;
   max-height: 6em;
+  background-color: var(--bg1);
 }
 
 #question {
   min-height: 1.3em;
-  height: 6em;
+  height: 1.3em;
   max-height: 24em;
   position:absolute;
-  bottom: 4.5em;
+  bottom: 0em;
   left:0px;
   right:0px;
 }
 
+textarea:focus, input:focus {
+  outline: none;
+  border: none;
+  border-left: 2px solid var(--acc1);
+  padding-left: calc(1em - 2px);
+}
+
+.role-input {
+  position: relative;
+}
+
+.question-input {
+  position: absolute;
+  bottom: 0px;
+  left:0px;
+  right: 0px;
+}
+
+/* --- Buttons ---*/
 .buttons {
   position: absolute;
   bottom: 0em;
@@ -300,16 +337,49 @@ main {
 
 button {
   border-radius: 0.4em;
-  height: 4em;
-  padding: 1em;
+  padding: 0.6em;
   margin: 0px 0.4em 0px 0px;
-  line-height: 1.2em;
+  line-height: 1em;
   text-align: center;
   color: var(--fg);  
-  background-color: var(--bg3);
+  background-color: var(--bg1);
   border: none;
-  border-left: 2px solid var(--bg3);
-  border-right: 2px solid var(--bg3);
+  border-left: 2px solid var(--bg1);
+  border-right: 2px solid var(--bg1);
+}
+
+.question-input button {
+  position:absolute;
+  right: 0.0em;
+  bottom: 0.5em;
+}
+
+.role-input button {
+  position:absolute;
+  right: 0.2em;
+  bottom: 0.7em;
+  background-color: var(--bg2);
+  border-left: 2px solid var(--bg2);
+  border-right: 2px solid var(--bg2);
+}
+
+.copy-to-clipboard {
+  text-align: center;
+  height: 1em;
+  padding: 1em;
+  margin: 0px;
+  display: inline-block;
+  line-height: 0.1em;
+  position: absolute;
+  right: 0.6em;
+  top: 0.6em;
+  border: 0px;
+}
+
+.copy-to-clipboard:after {
+  content:"\2604";
+  position: absolute;
+  left: 0.6em;
 }
 
 button:hover {
@@ -318,9 +388,9 @@ button:hover {
   cursor: pointer;
 }
 
+/* --- Chat History ---*/
 #chat {
   width: -webkit-fill-available;
-  width: -moz-available;
   margin: 2em 1em;
   position: relative;
   height: 60vh;
@@ -334,13 +404,28 @@ pre {
 }
 
 code  {
-  background-color: var(--bg3);
+  background-color: var(--bg2);
   padding: 0.1em 0.4em;
   border-radius: 0.4em;
-  color: var(--fg);
+  color: var(--acc2);
   font-family: consolas;
   position: relative;
 }
+
+pre:has(code[class]) {
+  width: -webkit-fill-available;
+}
+
+code[class] {
+  display: block;
+  background-color: var(--bg2);
+  color: var(--fg);
+  width: -webkit-fill-available;
+  min-height: 1em;
+  padding: 1em;
+  line-height:1.2em;
+}
+
 code * {  
   font-family: consolas;
 }
@@ -348,42 +433,25 @@ code * {
 blockquote * {
   margin: 0.5em 0px;
   font-family: Times New Roman;
-  text-transform:uppercase;
-  font-size: calc(0.9 * var(--fs-small));
+  /*text-transform:uppercase;*/
+  font-size: calc(0.9 * var(--fs-normal));
 }
 
 blockquote :first-child, blockquote :last-child {
   margin: 0px;
 }
-
+/*
 blockquote p::first-letter {
-  font-size: calc(1.1 * var(--fs-small));
-}
+  font-size: calc(1.1 * var(--fs-normal));
+}*/
 
 blockquote {
   background-color: var(--bg2);
   padding: 1em;
-  margin: 1em 0em 2em 3em;
+  margin: 1em 1em 1em 1em;
   border-radius: 0.4em;
   border-left: 0.5em solid var(--bg3);
-}
-
-.copy-to-clipboard {
-  text-align: center;
-  height: 1em;
-  margin: 0px;
-  display: inline-block;
-  line-height: 0em;
-  position: absolute;
-  right: 0.6em;
-  top: 0.6em;
-  border: 0px;
-}
-
-.copy-to-clipboard:after {
-  content:"\2604";
-  position: absolute;
-  left: 0.6em;
+  position:relative;
 }
 
 #chat img {

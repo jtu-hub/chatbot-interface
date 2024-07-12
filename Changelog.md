@@ -6,7 +6,7 @@
  * New Lighthouse behaviour on open
  * Improved layout for chat and lighthouse
  * Quote block style
- * Hide shortcut added to hide all inputs except lighthouse
+ * Hide shortcut added to hide question textarea
  * TODO: Save conversation as markdown 
 
 
