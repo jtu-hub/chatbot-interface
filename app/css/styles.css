@@ -141,6 +141,7 @@ input[type="number"] {
   overflow-y: auto;
   border-radius: 0.4em;
   text-align: right;
+  -moz-appearance: textfield;
 }
 
 input[type=number]::-webkit-inner-spin-button, 
@@ -277,6 +278,7 @@ ul, ol {
 
 main {
   width: -webkit-fill-available;
+  width: -moz-available;
   margin-left: 2em;
   position: relative;
   height: calc(100vh - 4em);
@@ -291,6 +293,7 @@ main {
   overflow-y: auto;
   border-radius: 0.4em;
   width: -webkit-fill-available;
+  width: -moz-available;
   line-height: 1.3em;
 }
 
@@ -391,6 +394,7 @@ button:hover {
 /* --- Chat History ---*/
 #chat {
   width: -webkit-fill-available;
+  width: -moz-available;
   margin: 2em 1em;
   position: relative;
   height: 60vh;
@@ -414,6 +418,7 @@ code  {
 
 pre:has(code[class]) {
   width: -webkit-fill-available;
+  width: -moz-available;
 }
 
 code[class] {
@@ -421,6 +426,7 @@ code[class] {
   background-color: var(--bg2);
   color: var(--fg);
   width: -webkit-fill-available;
+  width: -moz-available;
   min-height: 1em;
   padding: 1em;
   line-height:1.2em;
