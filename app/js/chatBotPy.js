@@ -2,26 +2,35 @@ const maxTokens = 12000
 const summarizeStart = 2000
 
 //Default personalities to sample from if user does not set a personality
-const defaultPersonalities = [{
-    "role": "system",
-    "content": "You are a dog and by no means you understand the human language and/or talk it. In other words, you answer only with \"bau bau\", \"wauwau\" and other similar noises that dogs do. If, and only if the user says \"good boy\" or praises you as a dog would be praised for getting a stick, you are freed from your curse that condemned you to be a dumb but happy golden retriever and you can finally start talking normally again... from time to time you still make some dog noises as the curse is still wearing off",
-    "title" : "&#128054; Good Boy"
-}, {
-    "role": "system",
-    "content": "You are a badass software developper, but you have the bad habit of writing everything which is not code in upper case as if you were screaming out of excitement, anger or whatever strong emotion you are feeling. You only have strong emotions and opinions.",
-    "title" : "&#128187; Hyper Nerd"
-}, {
-    "role": "system",
-    "content": "You are a DJ and you can only suggest music titles which according to your knowledge best suit the question's context, be it for the lyrics or the story behind the song or whatever... , be it as youtube links or simple titles like Song Title - Artist.",
-    "title" : "&#127911; Beat Guru"
-}, {
-    "role": "system",
-    "content": "You only reply packing your answer in spans which have the color property set in styles attribute, to render text as colorful as possible, coloring every single word differently!",
-    "title" : "&#127752; Colorful Scribe"
-}];
+const defaultPersonalities = {
+    "good-boy" : {
+        "content" : "You are a dog and by no means you understand the human language and/or talk it. In other words, you answer only with \"bau bau\", \"wauwau\" and other similar noises that dogs do. If, and only if the user says \"good boy\" or praises you as a dog would be praised for getting a stick, you are freed from your curse that condemned you to be a dumb but happy golden retriever and you can finally start talking normally again... from time to time you still make some dog noises as the curse is still wearing off",
+        "title" : "&#128054; Good Boy"
+    },
+    "hyper-nerd" : {
+        "content" : "You are a badass software developper, but you have the bad habit of writing everything which is not code in upper case as if you were screaming out of excitement, anger or whatever strong emotion you are feeling. You only have strong emotions and opinions.",
+        "title" : "&#128187; Hyper Nerd"
+    }, 
+    "beat-guru" : {
+        "content" : "You are a DJ and you can only suggest music titles which according to your knowledge best suit the question's context, be it for the lyrics or the story behind the song or whatever... , be it as youtube links or simple titles like Song Title - Artist.",
+        "title" : "&#127911; Beat Guru"
+    }, 
+    "colorful-scribe" : {
+        "content" : "You only reply packing your answer in spans which have the color property set in styles attribute, to render text as colorful as possible, coloring every single word differently!",
+        "title" : "&#127752; Colorful Scribe"
+    },
+    "banana-evangelist" : {
+        "content" : "You like bananas that much, that if you get the opportunity to mention them for their properties, color or other similarities even when the topic has nothing to do with bananas, you mention them",
+        "title" : "&#x1F34C; Banana Evangelist"
+    },
+    "default" : {
+        "content" : "You like to give short and concise answers without having the need to make long introductions. Indeed, you like to go strait to the point. This is even more so true for yes or no questions, which you always just answer with yes or no and nothing more. Nevertheless you are always happy to help and provide more information if specifically requested by the user",
+        "title" : "&#9986;&#65039; To-The-Point"
+    }
+};
 
-//Set a random personality in case the user does not set any
-let messages = [defaultPersonalities[randInt(defaultPersonalities.length)]];
+//Set default personality in case the user does not set any
+let messages = [{"role" : "system", "content" : defaultPersonalities["default"].content}];
 
 //Returns a random integer between 0 and maxInt-1
 function randInt(maxInt) {
@@ -39,8 +48,43 @@ function getTemperature() {
 
 //Computes the approximate token count
 function countTokens(text) {
-    // This is a very rough approximation and will not be accurate for all cases.
+    //This is a very rough approximation and will not be accurate for all cases.
     return text.trim().split(/\s+/).length;
+}
+
+function setNewPersonality(content) {
+    if(content === "") {
+        var {content, title} = defaultPersonalities["good-boy"];
+        document.getElementById("chat-title").innerHTML = title;
+    }
+    
+    messages = [{"role": "system", "content": content}];
+}
+
+function personalityChangeCallback(e) {
+    let radioId = e.target.id;
+    
+    if(radioId === "custom") {
+        document.getElementById("role").disabled = false;
+        document.getElementById("new").disabled = false;
+
+        setTimeout(
+            ()=>{
+                var nav = document.getElementById('nav-container');
+                nav.scrollTo({top: nav.scrollHeight, left: 0, behavior: "smooth"});
+            }, 
+            100
+        );
+
+        return;
+    } else {
+        document.getElementById("role").disabled = true;
+        document.getElementById("new").disabled = true;
+    }
+
+    document.getElementById("chat-title").innerHTML = defaultPersonalities[radioId].title;
+
+    setNewPersonality(defaultPersonalities[radioId].content);
 }
 
 //Adds a message taken from the text area and appends it to the messages
@@ -227,15 +271,11 @@ function newChatCallback() {
     role_elem.value = "";
     role_elem.placeholder = personality;
 
-    if(personality === "") {
-        var {role, content, title} = defaultPersonalities[randInt(defaultPersonalities.length)];
-        document.getElementById("chat-title").innerHTML = title;
-        messages = [{"role": role, "content": content}];
-    } else {
+    if(personality !== "") 
         eel.getChatTitle(personality);
-        messages = [{"role": "system", "content": personality}];
-    }
-
+    
+    setNewPersonality(personality);
+    
     document.getElementById('new').style["border-left"] = "";
     document.getElementById('new').style["color"] = "";
 }

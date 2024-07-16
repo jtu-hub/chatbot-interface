@@ -119,9 +119,9 @@ nav:has(textarea:focus) {
   height: calc(100vh - 6.5em);
 }
 
-nav:hover .nav-container, 
-nav:has(input:focus) .nav-container, 
-nav:has(textarea:focus) .nav-container {
+nav:hover #nav-container, 
+nav:has(input:focus) #nav-container, 
+nav:has(textarea:focus) #nav-container {
   height: calc(100vh - 10.5em);
   overflow-y: scroll;
   margin: 1em 0px;
@@ -142,6 +142,7 @@ input[type="number"] {
   border-radius: 0.4em;
   text-align: right;
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 input[type=number]::-webkit-inner-spin-button, 
@@ -156,6 +157,7 @@ input[type=number]::-webkit-outer-spin-button {
 .slider {
   margin: 0px 1% 1em 1%;
   -webkit-appearance: none;
+  appearance: none;
   width: 98%;
   height: 7px;
   border-radius: 7px;
@@ -244,10 +246,10 @@ td:last-child {
   margin-right: 0.7em;
 }
 
-/* --- THEME TOGGLE ----------------------------------------------------------------------------- */
-#theme-toggle-label {
+/* --- THEME TOGGLE and PERSONALITY RADIO ---------------------------------------------------------- */
+label[for] {
   font-size: var(--fs-big);
-  width: 1em;
+  min-width: 1em;
   height: 1em;
   background-color: var(--bg1);
   display: inline-block;
@@ -257,19 +259,32 @@ td:last-child {
   line-height: 1em;
   font-weight: normal;
   text-align: center;
-  margin-left: 0.5em;
-  letter-spacing: 1pt; /*to horizontally align the symbol*/
+  margin: 0em 0.2em 0.2em 0em;
+  letter-spacing: 2pt;
 }
 
-#theme-toggle-label:hover {
-  border-left: 2px solid var(--acc1);
-  color: var(--acc1);
-  cursor: pointer;
+#theme-toggle-label {
+  margin-left: 0.5em;
 }
 
 #theme-toggle {
   display: none;
 }
+
+input[type="radio"] {
+  display: none;
+}
+
+input[type="radio"]:checked + label {
+  border-left: 2px solid var(--acc2);
+}
+
+label[for]:hover {
+  border-left: 2px solid var(--acc1);
+  color: var(--acc1);
+  cursor: pointer;
+}
+
 
 /* --- CHAT SETTINGS ---------------------------------------------------------------------------- */
 ul, ol {
@@ -485,4 +500,9 @@ blockquote {
 
 .user {
   color: var(--user);
+}
+
+
+#role:disabled, #new:disabled {
+  display: none;
 }
