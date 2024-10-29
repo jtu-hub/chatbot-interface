@@ -205,7 +205,7 @@ td {
 
 td:first-child {
   width: 35%;
-  text-wrap: nowrap;
+  text-wrap: wrap;
   border-bottom: 1px solid var(--acc1);
   border-right: 0.3em solid var(--acc1);
   /*border-left: 1em solid var(--bg3);*/
@@ -218,6 +218,8 @@ td:last-child {
   background-color: var(--bg2);
   /*border-top: 1px solid var(--bg3);*/
   border-left: 0.7em solid var(--bg3);
+  word-break:keep-all;
+  text-wrap: balance;
   /*border-right: 1px solid var(--bg3);*/
 }
 
@@ -231,6 +233,7 @@ td:last-child {
   background-color: var(--bg3);
   border-radius: 0.4em;
   word-break:keep-all;
+  text-wrap: nowrap;
 }
 
 .shortcut-keys {
