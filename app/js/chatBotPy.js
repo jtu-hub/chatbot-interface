@@ -282,7 +282,7 @@ function newChatCallback() {
 
 eel.expose(onGPTPersonalityCallback);
 function onGPTPersonalityCallback(personalityTitle) {
-    document.getElementById("chat-title").innerHTML = escapeHtml(personalityTitle.replace("\"", ""))
+    document.getElementById("chat-title").innerHTML = escapeHtml(personalityTitle.replace(/"/g, ""))
 }
 
 eel.expose(handleError);
