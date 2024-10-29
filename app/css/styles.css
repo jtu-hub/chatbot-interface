@@ -337,7 +337,7 @@ main {
   right:0px;
 }
 
-textarea:focus, input:focus {
+textarea:focus, input[type="number"]:focus {
   outline: none;
   border: none;
   border-left: 2px solid var(--acc1);
